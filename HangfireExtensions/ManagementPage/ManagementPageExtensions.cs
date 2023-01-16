@@ -1,31 +1,30 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 using Hangfire.Dashboard;
-using Microsoft.AspNetCore.Builder;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Owin;
 
-namespace CustomPage.HangfireExtensions.ManagementPage
+namespace CustomPageFramework.HangfireExtensions.ManagementPage
 {
     public static class ManagementPageExtensions
     {
         public const string UrlPath = "/management";
-        public static IApplicationBuilder UseManagementPage(this IApplicationBuilder app)
+        public static IAppBuilder UseManagementPage(this IAppBuilder app)
         {
             var tables = BuildTableConfigurations();
 
-            DashboardRoutes.Routes.AddRazorPage(UrlPath, x => new Management(app.ApplicationServices, tables));
-            DashboardRoutes.Routes.AddRazorPage($"{UrlPath}/(?<TableName>.*)", x => new Management(app.ApplicationServices, tables, x.Groups["TableName"].Value));
-            DashboardRoutes.Routes.Add($"{UrlPath}Actions/Save", new SaveDispatcher(app.ApplicationServices, tables));
+            DashboardRoutes.Routes.AddRazorPage(UrlPath, x => new Management(tables));
+            DashboardRoutes.Routes.AddRazorPage($"{UrlPath}/(?<TableName>.*)", x => new Management(tables, x.Groups["TableName"].Value));
+            DashboardRoutes.Routes.Add($"{UrlPath}Actions/Save", new SaveDispatcher(tables));
             NavigationMenu.Items.Add(page => new MenuItem("Management", page.Url.To(UrlPath))
             {
                 Active = page.RequestPath.StartsWith(UrlPath)
             });
 
-            GlobalConfigurationExtensions.AddDashboardRouteToEmbeddedResource($"{UrlPath}Resources/css/style.css", "text/css", "CustomPage.HangfireExtensions.ManagementPage.Resources.style.css");
-            GlobalConfigurationExtensions.AddDashboardRouteToEmbeddedResource($"{UrlPath}Resources/js/app.js", "application/javascript", "CustomPage.HangfireExtensions.ManagementPage.Resources.app.js");
-            GlobalConfigurationExtensions.AddDashboardRouteToEmbeddedResource($"{UrlPath}Resources/js/vue.global.js", "application/javascript", "CustomPage.HangfireExtensions.ManagementPage.Resources.vue.global.js");
-            GlobalConfigurationExtensions.AddDashboardRouteToEmbeddedResource($"{UrlPath}Resources/js/axios.min.js", "application/javascript", "CustomPage.HangfireExtensions.ManagementPage.Resources.axios.min.js");
+            GlobalConfigurationExtensions.AddDashboardRouteToEmbeddedResource($"{UrlPath}Resources/css/style", "text/css", "CustomPageFramework.HangfireExtensions.ManagementPage.Resources.style.css");
+            GlobalConfigurationExtensions.AddDashboardRouteToEmbeddedResource($"{UrlPath}Resources/js/app", "application/javascript", "CustomPageFramework.HangfireExtensions.ManagementPage.Resources.app.js");
+            GlobalConfigurationExtensions.AddDashboardRouteToEmbeddedResource($"{UrlPath}Resources/js/vue", "application/javascript", "CustomPageFramework.HangfireExtensions.ManagementPage.Resources.vue.global.js");
+            GlobalConfigurationExtensions.AddDashboardRouteToEmbeddedResource($"{UrlPath}Resources/js/axios", "application/javascript", "CustomPageFramework.HangfireExtensions.ManagementPage.Resources.axios.min.js");
             return app;
         }
 

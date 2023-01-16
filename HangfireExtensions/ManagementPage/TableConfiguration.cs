@@ -1,4 +1,4 @@
-﻿namespace CustomPage.HangfireExtensions.ManagementPage
+﻿namespace CustomPageFramework.HangfireExtensions.ManagementPage
 {
     public delegate string BuildInsertStatement(object row);
 

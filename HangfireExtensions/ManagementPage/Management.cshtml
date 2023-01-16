@@ -1,9 +1,9 @@
-﻿@* Generator: Template TypeVisibility: Internal GeneratePrettyNames: True *@
-@using CustomPage.HangfireExtensions.ManagementPage
+﻿@* Generator: Template TypeVisibility: Internal GeneratePrettyNames: True RazorVersion : 1 *@
+@using CustomPageFramework.HangfireExtensions.ManagementPage
 @using Hangfire.Dashboard
 @using Hangfire.Dashboard.Pages
 @using Newtonsoft.Json
-@inherits RazorPage
+@inherits Hangfire.Dashboard.RazorPage
 
 @{
     Layout = new LayoutPage("Management");
@@ -14,17 +14,17 @@
     {
         var segment = $"{ManagementPageExtensions.UrlPath}/{table.Name}";
         tables.Add(page => new MenuItem(table.Name, page.Url.To(segment))
-                {
-                    Active = page.RequestPath.StartsWith(segment)
-                });
+        {
+            Active = page.RequestPath.StartsWith(segment)
+        });
     }
 
     var data = ReadData(CurrentTable);
 }
-<link rel="stylesheet" type="text/css" href="@($"/hangfire/{ManagementPageExtensions.UrlPath[1..]}Resources/css/style.css")" />
-<script src="@($"/hangfire/{ManagementPageExtensions.UrlPath[1..]}Resources/js/vue.global.js")"></script>
-<script src="@($"/hangfire/{ManagementPageExtensions.UrlPath[1..]}Resources/js/axios.min.js")"></script>
-<script src="@($"/hangfire/{ManagementPageExtensions.UrlPath[1..]}Resources/js/app.js")"></script>
+<link rel="stylesheet" type="text/css" href="@($"/hangfire/{ManagementPageExtensions.UrlPath.Substring(1)}Resources/css/style")" />
+<script src="@($"/hangfire/{ManagementPageExtensions.UrlPath.Substring(1)}Resources/js/vue")"></script>
+<script src="@($"/hangfire/{ManagementPageExtensions.UrlPath.Substring(1)}Resources/js/axios")"></script>
+<script src="@($"/hangfire/{ManagementPageExtensions.UrlPath.Substring(1)}Resources/js/app")"></script>
 <div class="row">
     <div class="col-md-3">
         @Html.SidebarMenu(tables)
@@ -39,7 +39,7 @@
         }
         else
         {
-            <div id="app" data-rows="@JsonConvert.SerializeObject(data.Select(x=>JsonConvert.SerializeObject(x)))" data-save-url="@($"/hangfire/{ManagementPageExtensions.UrlPath[1..]}Actions/Save")" data-table-name="@CurrentTable.Name" class="js-jobs-list">
+            <div id="app" data-rows="@JsonConvert.SerializeObject(data.Select(x=>JsonConvert.SerializeObject(x)))" data-save-url="@($"/hangfire/{ManagementPageExtensions.UrlPath.Substring(1)}Actions/Save")" data-table-name="@CurrentTable.Name" class="js-jobs-list">
                 <div class="alert alert-success" v-show="showSuccessNotification" style="display: none">Settings are saved</div>
                 <div class="alert alert-danger" v-show="showErrorNotification" style="display: none">Settings aren't saved</div>
                 <div class="form-item">
@@ -55,7 +55,7 @@
                 <div class="form-item">
                     <label class="form-item__label required">Server Url</label>
                     <div class="input__wrapper">
-                        <input type="text" required="required" class="input__inner" v-model="settings.serverUrl" @@input="validate"/>
+                        <input type="text" required="required" class="input__inner" v-model="settings.serverUrl" @@input="validate" />
                     </div>
                     <div class="form-item__error" v-show="showValidationError" style="display:none">
                         Please input the server url

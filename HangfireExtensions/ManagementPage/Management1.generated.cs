@@ -9,7 +9,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CustomPage.HangfireExtensions.ManagementPage
+namespace CustomPageFramework.HangfireExtensions.ManagementPage
 {
     using System;
     using System.Collections.Generic;
@@ -17,7 +17,7 @@ namespace CustomPage.HangfireExtensions.ManagementPage
     using System.Text;
     
     #line 2 "..\..\HangfireExtensions\ManagementPage\Management.cshtml"
-    using CustomPage.HangfireExtensions.ManagementPage;
+    using CustomPageFramework.HangfireExtensions.ManagementPage;
     
     #line default
     #line hidden
@@ -41,7 +41,7 @@ namespace CustomPage.HangfireExtensions.ManagementPage
     #line hidden
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("RazorGenerator", "2.0.0.0")]
-    internal partial class Management : RazorPage
+    internal partial class Management : Hangfire.Dashboard.RazorPage
     {
 #line hidden
 
@@ -70,9 +70,9 @@ WriteLiteral("\n");
     {
         var segment = $"{ManagementPageExtensions.UrlPath}/{table.Name}";
         tables.Add(page => new MenuItem(table.Name, page.Url.To(segment))
-                {
-                    Active = page.RequestPath.StartsWith(segment)
-                });
+        {
+            Active = page.RequestPath.StartsWith(segment)
+        });
     }
 
     var data = ReadData(CurrentTable);
@@ -86,7 +86,7 @@ WriteLiteral("<link rel=\"stylesheet\" type=\"text/css\" href=\"");
 
             
             #line 24 "..\..\HangfireExtensions\ManagementPage\Management.cshtml"
-                                         Write($"/hangfire/{ManagementPageExtensions.UrlPath[1..]}Resources/css/style.css");
+                                         Write($"/hangfire/{ManagementPageExtensions.UrlPath.Substring(1)}Resources/css/style");
 
             
             #line default
@@ -96,7 +96,7 @@ WriteLiteral("\" />\n<script src=\"");
 
             
             #line 25 "..\..\HangfireExtensions\ManagementPage\Management.cshtml"
-         Write($"/hangfire/{ManagementPageExtensions.UrlPath[1..]}Resources/js/vue.global.js");
+         Write($"/hangfire/{ManagementPageExtensions.UrlPath.Substring(1)}Resources/js/vue");
 
             
             #line default
@@ -106,7 +106,7 @@ WriteLiteral("\"></script>\n<script src=\"");
 
             
             #line 26 "..\..\HangfireExtensions\ManagementPage\Management.cshtml"
-         Write($"/hangfire/{ManagementPageExtensions.UrlPath[1..]}Resources/js/axios.min.js");
+         Write($"/hangfire/{ManagementPageExtensions.UrlPath.Substring(1)}Resources/js/axios");
 
             
             #line default
@@ -116,7 +116,7 @@ WriteLiteral("\"></script>\n<script src=\"");
 
             
             #line 27 "..\..\HangfireExtensions\ManagementPage\Management.cshtml"
-         Write($"/hangfire/{ManagementPageExtensions.UrlPath[1..]}Resources/js/app.js");
+         Write($"/hangfire/{ManagementPageExtensions.UrlPath.Substring(1)}Resources/js/app");
 
             
             #line default
@@ -180,7 +180,7 @@ WriteLiteral("\" data-save-url=\"");
 
             
             #line 42 "..\..\HangfireExtensions\ManagementPage\Management.cshtml"
-                                                                                                                              Write($"/hangfire/{ManagementPageExtensions.UrlPath[1..]}Actions/Save");
+                                                                                                                              Write($"/hangfire/{ManagementPageExtensions.UrlPath.Substring(1)}Actions/Save");
 
             
             #line default
@@ -190,7 +190,7 @@ WriteLiteral("\" data-table-name=\"");
 
             
             #line 42 "..\..\HangfireExtensions\ManagementPage\Management.cshtml"
-                                                                                                                                                                                                                   Write(CurrentTable.Name);
+                                                                                                                                                                                                                           Write(CurrentTable.Name);
 
             
             #line default
@@ -214,7 +214,7 @@ WriteLiteral(@""" class=""js-jobs-list"">
                         <input type=""text"" required=""required"" class=""input__inner"" v-model=""settings.serverUrl"" ");
 
 
-WriteLiteral(@"@input=""validate""/>
+WriteLiteral(@"@input=""validate"" />
                     </div>
                     <div class=""form-item__error"" v-show=""showValidationError"" style=""display:none"">
                         Please input the server url

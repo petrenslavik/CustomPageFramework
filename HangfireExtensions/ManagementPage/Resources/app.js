@@ -43,18 +43,27 @@ function ready() {
                     return;
                 }
                 this.showValidationError = false;
-                var form_data = new FormData();
-                form_data.append("tableName", this.tableName);
+                
                 var newRow = Object.assign({}, this.row);
                 newRow["SettingJson"] = JSON.stringify(this.settings);
-                form_data.append("data", JSON.stringify(newRow));
+
+                const params = {
+                    "tableName": this.tableName,
+                    "data": JSON.stringify(newRow)
+                };
+
+                const data = Object.keys(params)
+                    .map((key) => `${key}=${encodeURIComponent(params[key])}`)
+                    .join('&');
 
                 var csrfHeader = $('meta[name="csrf-header"]').attr('content');
                 var csrfToken = $('meta[name="csrf-token"]').attr('content');
-                var headers = {};
+                var headers = {
+                    'content-type': 'application/x-www-form-urlencoded'
+                };
                 headers[csrfHeader] = csrfToken;
 
-                axios.post(this.saveUrl, form_data, { headers }).then(() => {
+                axios.post(this.saveUrl, data, { headers }).then(() => {
                     this.showSuccessNotification = true;
                     setTimeout(() => {
                         this.showSuccessNotification = false;

@@ -1,9 +1,9 @@
-﻿using Hangfire.Dashboard;
+﻿using System;
 using System.Reflection;
 using System.Threading.Tasks;
-using System;
+using Hangfire.Dashboard;
 
-namespace CustomPage.HangfireExtensions
+namespace CustomPageFramework.HangfireExtensions
 {
     public class ContentDispatcher : IDashboardDispatcher
     {

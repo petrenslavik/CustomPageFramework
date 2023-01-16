@@ -1,13 +1,13 @@
-﻿using CustomPage.HangfireExtensions.ManagementPage;
-using Microsoft.AspNetCore.Builder;
-using System;
+﻿using System;
+using CustomPageFramework.HangfireExtensions.ManagementPage;
 using Hangfire.Dashboard;
+using Owin;
 
-namespace CustomPage.HangfireExtensions
+namespace CustomPageFramework.HangfireExtensions
 {
     public static class GlobalConfigurationExtensions
     {
-        public static IApplicationBuilder UseHangfireCustomPages(this IApplicationBuilder app)
+        public static IAppBuilder UseHangfireCustomPages(this IAppBuilder app)
         {
             if (app == null)
                 throw new ArgumentNullException(nameof(app));
