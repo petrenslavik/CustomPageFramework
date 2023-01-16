@@ -1,0 +1,82 @@
+﻿@* Generator: Template TypeVisibility: Internal GeneratePrettyNames: True *@
+@using CustomPage.HangfireExtensions.ManagementPage
+@using Hangfire.Dashboard
+@using Hangfire.Dashboard.Pages
+@using Newtonsoft.Json
+@inherits RazorPage
+
+@{
+    Layout = new LayoutPage("Management");
+
+    var tables = new List<Func<RazorPage, MenuItem>>();
+
+    foreach (var table in AvailableTables)
+    {
+        var segment = $"{ManagementPageExtensions.UrlPath}/{table.Name}";
+        tables.Add(page => new MenuItem(table.Name, page.Url.To(segment))
+                {
+                    Active = page.RequestPath.StartsWith(segment)
+                });
+    }
+
+    var data = ReadData(CurrentTable);
+}
+<link rel="stylesheet" type="text/css" href="@($"/hangfire/{ManagementPageExtensions.UrlPath[1..]}Resources/css/style.css")" />
+<script src="@($"/hangfire/{ManagementPageExtensions.UrlPath[1..]}Resources/js/vue.global.js")"></script>
+<script src="@($"/hangfire/{ManagementPageExtensions.UrlPath[1..]}Resources/js/axios.min.js")"></script>
+<script src="@($"/hangfire/{ManagementPageExtensions.UrlPath[1..]}Resources/js/app.js")"></script>
+<div class="row">
+    <div class="col-md-3">
+        @Html.SidebarMenu(tables)
+    </div>
+    <div class="col-md-9">
+        <h1 class="page-header">@(CurrentTable.Name ?? "Management")</h1>
+        @if (tables.Count == 0)
+        {
+            <div class="alert alert-warning">
+                No tables configured
+            </div>
+        }
+        else
+        {
+            <div id="app" data-rows="@JsonConvert.SerializeObject(data.Select(x=>JsonConvert.SerializeObject(x)))" data-save-url="@($"/hangfire/{ManagementPageExtensions.UrlPath[1..]}Actions/Save")" data-table-name="@CurrentTable.Name" class="js-jobs-list">
+                <div class="alert alert-success" v-show="showSuccessNotification" style="display: none">Settings are saved</div>
+                <div class="alert alert-danger" v-show="showErrorNotification" style="display: none">Settings aren't saved</div>
+                <div class="form-item">
+                    <label class="form-item__label">Server Type</label>
+                    <div class="input__wrapper">
+                        <select name="serverType" class="input__inner" v-model="settings.serverType">
+                            <option value="SRV1">SRV1</option>
+                            <option value="SRV2">SRV2</option>
+                            <option value="SRV3">SRV3</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-item">
+                    <label class="form-item__label required">Server Url</label>
+                    <div class="input__wrapper">
+                        <input type="text" required="required" class="input__inner" v-model="settings.serverUrl" @@input="validate"/>
+                    </div>
+                    <div class="form-item__error" v-show="showValidationError" style="display:none">
+                        Please input the server url
+                    </div>
+                </div>
+                <div class="form-item">
+                    <label class="form-item__label">Username</label>
+                    <div class="input__wrapper">
+                        <input type="text" class="input__inner" v-model="settings.username" />
+                    </div>
+                </div>
+                <div class="form-item">
+                    <label class="form-item__label">Password</label>
+                    <div class="input__wrapper">
+                        <input type="text" class="input__inner" v-model="settings.password" />
+                    </div>
+                </div>
+                <div class="buttons">
+                    <button type="button" class="management-button success" @@click="save">Save</button>
+                </div>
+            </div>
+        }
+    </div>
+</div>
